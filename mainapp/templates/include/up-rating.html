@@ -1,0 +1,5 @@
+<form action="{% url 'mainapp:update-rating' artist.id %}" method='POST' name="update-rating">
+    <input type="hidden" value="1" name="value">
+    <input type="hidden" id="{{ artist.id }}" name="id_value">
+    {% csrf_token %}
+    <button type="submit" class="btn" id="btn-thumb-up"></button</form></div>

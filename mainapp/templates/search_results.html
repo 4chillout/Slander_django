@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Slander | Поиск по результатам{% endblock %}
+
+{% block content %}
+
+
+{% include 'include/header.html' %}
+
+{% if object_list %}
+  <div class="query-result">
+    <h4>Результаты поиска по {{query_name}}</h4>
+  </div>
+  {% if obj_name == 'artist' %}
+    {% include 'include/artist-utils.html' %}
+    {% include 'include/artist-card.html' %}
+  {% elif obj_name == 'album' %}
+    {% include 'include/album-utils.html' %}
+    {% include 'include/album-card.html' %}
+  {% elif obj_name == 'track' %}
+    {% include 'include/track-utils.html' %}
+    {% include 'include/track-card.html' %}
+  {% endif %}
+{% else %}
+  <div class="query-result-none">
+    <h4>По запросу {{query_name}} не найдено ни одной записи</h4>
+  </div>
+  {% if obj_name == 'artist' %}
+    {% include 'include/artist-utils.html' %}
+  {% elif obj_name == 'album' %}
+    {% include 'include/album-utils.html' %}
+  {% elif obj_name == 'track' %}
+    {% include 'include/track-utils.html' %}
+  {% endif %}
+{% endif %}
+
+
+<div class="grid-img-right mt-4 text-right bg bg1" >
+  {% include 'include/pagination.html' %}
+</div>
+
+
+{% endblock %}

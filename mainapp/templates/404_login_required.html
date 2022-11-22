@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Slander | Страница не найдена{% endblock %}
+{% block content %}
+{% include 'include/header.html' %}
+
+<div class="row">
+    <div class="col-sm-6">
+        <p>404</p>
+        <h1>Страница не найдена</h1>
+        <h1>Для данного действия необходимо <a href="{% url 'login' %}">Войти</a> или <a href="{% url 'user_register' %}">Зарегестрироваться</a></h1>
+    </div>
+</div>
+{% endblock %}

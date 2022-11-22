@@ -1,0 +1,25 @@
+<div class="likes-album">
+    <div class="like-elem" id="thumb-up">
+      <form action="{% url 'mainapp:update-rating-to-album' album.id %}" method='POST' name="update-rating">
+        {% csrf_token %}
+        <input type="hidden" value="1" name="value">
+        <input type="hidden" value="{{ album.id }}" name="id">
+        <input type="hidden" value="album" name="obj-type">
+        <button type="submit" class="btn" id="btn-thumb-up"></button>
+      </form>
+    </div>
+    
+    <div class="like-elem">
+      {{ album.rate }}
+    </div>
+    
+    <div class="like-elem" id="thumb-down">
+      <form action="{% url 'mainapp:update-rating-to-album' album.id %}" method='POST' name="update-rating">
+        {% csrf_token %}
+        <input type="hidden" value="-1" name="value">
+        <input type="hidden" value="{{ album.id }}" name="id">
+        <input type="hidden" value="album" name="obj-type">
+        <button type="submit" class="btn" id="btn-thumb-down"></button>
+      </form>
+    </div>
+  </div>

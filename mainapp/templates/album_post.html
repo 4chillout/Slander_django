@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Slander | Альбомы{% endblock %}
+{% block content %}
+{% include 'include/header.html' %}
+
+<div class="row">
+    <div class="col-sm-6">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <p>{% if error_message %}
+                    {{ error_message }}
+                {% endif %}</p>
+                {% for field in form %}
+                <div class="form-group">
+                    <h1>{{ field.label_tag}}</h1>
+                    {{ field }}
+                </div>
+                {% endfor %}
+            </div> 
+            <input type="submit" value="Сохранить" class="w-25 btn btn-primary" enctype="multipart/form-data"></form>
+    </div>
+</div>
+{% endblock %}

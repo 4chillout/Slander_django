@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{album.title}}{% endblock %}
+
+{% block content %}
+{% include 'include/header.html' %}
+{% include 'include/album-utils.html' %}
+
+
+<div class="artist-detail">
+    <div class="card text-white bg-dark" id="artist-card-detail">
+        <div class="row g-0">
+            <p class="tracks">
+                <span>
+                {% if album.html %}
+                    {% autoescape off %}
+                        {{ album.html }}
+                    {% endautoescape %}
+                {% else %}
+                    <h9>Послушать альбом невозможно. <a href = "{% url 'mainapp:album_update' album.id %}">Необходимо добавить ссылку на альбом со Spotify или Яндекс.Музыка</a></h9>
+                {% endif %}
+                </span>
+            </p>
+            <div class="col-md-4" style="max-height: 500px;">
+                {% include 'include/album-likes.html' %}
+            </div>
+            <p class="card-text" id="artist-bio"><b>Дата релиза:</b> {{ album.published_date }}</p>
+            <p class="artist-albums-tracks" id="album-detail-genres">
+                <span><b>Жанры:</b>
+                {% for genre in album.genres.all %}
+                    <h9>{{genre.name}}</h9>
+                {% empty %}
+                    <h9><a href = "{% url 'mainapp:album_update' album.id %}">Добавь, кликнув сюда.</a></h9>
+                {% endfor %}
+                </span>
+            </p>
+            <p class="card-text" id="album-bio">{{ album.description }}</p>
+            {% if user.id == album.user.id %}
+                <form action="{% url 'mainapp:album_delete' album.id %}" id="album-detail-delete" accept-charset="utf-8" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary artist-delete">Удалить альбом</button>
+                </form>
+                <form action="{% url 'mainapp:album_update' album.id %}" id="album-detail-edit" accept-charset="utf-8" method="GET">
+                    <button type="submit" class="btn btn-secondary artist-update">Редактировать информацию об альбоме</button>
+                </form>
+            {% endif %}
+            <div class="card-footer footer-custom">
+                <div class="comments-detail" id="comments">
+                    <p><h5><b>Комментарии</b></h5></p>
+                    <p>
+                    {% for comment in album.get_comments %}
+                        <div class="card text-white bg-dark mb-3" style="max-width: 18rem;" id="comment-body">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="{{ comment.get_user_pic }}" class="img-fluid" alt="Photo">
+                                </div>
+                                <div class="col-md-4 col-md-offset-2">
+                                    <h5 class="card-title" id="comment-name">{{ comment.author_name }}</h5>
+                                    <p class="card-text" id="comment-text">{{ comment.comment_text }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <h6>Комментариев к данному альбому ещё нет. Будь первым!</h6>
+                    {% endfor %}
+                        <form method="POST" action="{% url 'mainapp:add_comment_to_album' album.id %}" id="add_comment">
+                            {% csrf_token %}
+                            {% if user.is_authenticated %}
+                                <div class="form-group">
+                                    <h5>{{ user.username  }}</h5>
+                                    <h7>{{ form.comment_text.label_tag }}</h7>
+                                    <h6>{{ form.comment_text }}</h6>
+                                    <h6>{{ form.comment_text.errors }}</h6>
+                                </div>
+                            {% else %}
+                                <div class="form-group">
+                                    <h7>{{ form.comment_text.label_tag }}</h7>
+                                    <h6>{{ form.comment_text }}</h6>
+                                    <h6>{{ form.comment_text.errors }}</h6>
+                                </div>
+                            {% endif %}
+                          <input type="submit" value="Отправить" class="w-25 btn btn-primary" enctype="multipart/form-data">
+                        </form>
+
+                    </div>
+                    </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

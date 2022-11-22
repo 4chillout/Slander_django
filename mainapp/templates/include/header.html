@@ -1,0 +1,41 @@
+{% load static %}
+<img src="{% static 'images/mainpage17.jpg' %}" class="background" />
+<header class="header"> 
+  <a href="{% url 'mainapp:main_page' %}"><img src="{% static 'images/logo.png' %}" class="logo" /></a>
+  <ul class = "menu">
+    <li><a href="{% url 'mainapp:main_page' %}">Главная</a></li>
+    <li><a href="{% url 'mainapp:artists' %}">Артисты</a></li>
+    <li><a href="{% url 'mainapp:albums' %}">Альбомы</a></li>
+    <li><a href="{% url 'mainapp:tracks' %}">Треки</a></li>
+  {% if user.is_authenticated %}
+    <li>
+      <div class="user_profile">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{{ user.get_userpic }}" class="img-user" alt="Photo"><span><b>{{ user.username }}</b></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <form action="{% url 'change_pic' user.id %}" method="GET" name="change_pic">
+              <button class="dropdown-item" type="submit">Загрузить фото</button>
+            </form>
+          </li>
+          <li>
+            <form action="{% url 'change_password' user.id %}" method="GET" name="change_password">
+              <button class="dropdown-item" type="submit">Изменить пароль</button>
+            </form>
+          </li>
+          <li>
+            <form action="{% url 'logout' %}" method="GET">
+              <button class="dropdown-item" type="submit">Выйти</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </li>
+  {% else %}
+    <li><a href="{% url 'login' %}">Войти</a></li>
+    <li><a href="{% url 'user_register' %}">Регистрация</a></li>
+  {% endif %}
+  </ul>
+<hr></hr>
+</header>

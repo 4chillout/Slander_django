@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Slander | Главная{% endblock %}
+
+{% block content %}
+{% include 'include/header.html' %}
+
+
+<div class="d1" id="main-search"> 
+  <form class="main-search" action="{% url 'mainapp:main-search' %}" accept-charset="utf-8" method="GET">
+    <input type="text" placeholder="Искать здесь..." name="q" required="">
+    <button type="submit"></button>
+  </form>
+</div>  
+{% endblock %}

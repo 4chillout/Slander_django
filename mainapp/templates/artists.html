@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Slander | Артисты{% endblock %}
+
+{% block content %}
+
+
+{% include 'include/header.html' %}
+
+{% include 'include/artist-utils.html' %}
+
+{% include 'include/artist-card.html' %}
+
+<div class="grid-img-right mt-4 text-right bg bg1" >
+  {% include 'include/pagination.html' %}
+</div>
+
+
+{% endblock %}

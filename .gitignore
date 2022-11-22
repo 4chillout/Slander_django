@@ -1,0 +1,10 @@
+pychache/
+
+*.pyc
+
+db.sqlite3
+
+
+
+.heroku
+.procfile

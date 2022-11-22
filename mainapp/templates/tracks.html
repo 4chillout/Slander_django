@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Slander | Треки{% endblock %}
+
+{% block content %}
+
+
+{% include 'include/header.html' %}
+
+{% include 'include/track-utils.html' %}
+
+{% include 'include/track-card.html' %}
+
+
+<div class="grid-img-right mt-4 text-right bg bg1" >
+  {% include 'include/pagination.html' %}
+</div>
+
+
+{% endblock %}

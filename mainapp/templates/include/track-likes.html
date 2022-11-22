@@ -1,0 +1,25 @@
+<div class="likes">
+    <div class="like-elem" id="thumb-up">
+      <form action="{% url 'mainapp:update-rating-to-track' track.id %}" method='POST' name="update-rating">
+        {% csrf_token %}
+        <input type="hidden" value="1" name="value">
+        <input type="hidden" value="{{ track.id }}" name="id">
+        <input type="hidden" value="track" name="obj-type">
+        <button type="submit" class="btn" id="btn-thumb-up"></button>
+      </form>
+    </div>
+    
+    <div class="like-elem">
+      {{ track.rate }}
+    </div>
+    
+    <div class="like-elem" id="thumb-down">
+      <form action="{% url 'mainapp:update-rating-to-track' track.id %}" method='POST' name="update-rating">
+        {% csrf_token %}
+        <input type="hidden" value="-1" name="value">
+        <input type="hidden" value="{{ track.id }}" name="id">
+        <input type="hidden" value="track" name="obj-type">
+        <button type="submit" class="btn" id="btn-thumb-down"></button>
+      </form>
+    </div>
+</div>

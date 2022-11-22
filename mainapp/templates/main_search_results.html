@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Slander | Артисты{% endblock %}
+
+{% block content %}
+{% include 'include/header.html' %}
+
+
+
+<div class="d1" id="left-search">
+  <form method="GET" action="{% url 'mainapp:artist-search' %}" class="d-flex editContent">
+    <input type="search" placeholder="Поиск по артистам" name="q" required="">
+    <button type="submit"></button>
+  </form>
+</div>
+
+
+<form action="{% url 'mainapp:artist-filter' %}" method="get" name="filter">
+  <div class="container" style="max-width: 210px">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <span class="navbar-brand">Поиск по жанрам</span>
+    </nav>
+    <hr></hr>
+    <ul class="nav flex-column">
+      {% for genre in view.get_genres %}
+        <li class="nav-item">
+          <input type="checkbox" class="checked" name="genre" value="{{ genre.name }}">
+          <span class="span-editContent">{{ genre.name  }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <button class="btn btn-secondary filter-genre" type="submit">Найти</button>
+</form>
+
+<a href="{% url 'mainapp:add-genre' %}"><button type="submit" class="btn" id="btn-thumb-genre-add"></button></a>
+
+{% if object_list %}
+  <div class="query-result">
+    <h4>Результаты поиска по {{query_name}}</h4>
+  </div>
+  {% include 'include/universal-card.html' %}
+{% else %}
+  <div class="query-result-none">
+    <h4>По запросу {{query_name}} не найдено ни одной записи</h4>
+  </div>
+{% endif %}
+
+
+<button type="button" class="btn btn-secondary" id="dropdownMenu2"><a href="{% url 'mainapp:artist_post' %}">Добавить артиста</a></button>
+
+
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+      Фильтр по рейтингу
+  </button>
+  <ul class="dropdown-menu">
+      <li>
+          <form action="{% url 'mainapp:sort-artists' %}" method="GET" name="rating">
+              <input type="hidden" value="up-to-down" name="sort-type">
+              <button class="dropdown-item" type="submit">По убыванию</button>
+          </form>
+      </li>
+      <li>
+          <form action="{% url 'mainapp:sort-artists' %}" method="GET" name="rating">
+              <input type="hidden" value="down-to-up" name="sort-type">
+              <button class="dropdown-item" type="submit">По возрастанию</button>
+          </form>
+      </li>
+  </ul>
+</div>
+
+<div class="grid-img-right mt-4 text-right bg bg1" >
+  {% include 'include/pagination.html' %}
+</div>
+
+{% endblock %}

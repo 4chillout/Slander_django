@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{artist.name}}{% endblock %}
+
+{% block content %}
+
+
+{% include 'include/header.html' %}
+
+{% include 'include/artist-utils.html' %}
+
+
+<div class="artist-detail">
+    <div class="card text-white bg-dark" id="artist-card-detail">
+        <div class="row g-0">
+            <div class="col-md-4" style="max-height: 500px;">
+                {% if artist.get_photo %}
+                    <img src="{{ artist.get_photo.url }}" class="img-fluid" alt="Фотографии артиста нет">
+                {% else %}
+                    <img src="{% static 'images/no-photo.gif' %}" class="img-fluid" alt="Фотографии артиста нет">
+                {% endif %}
+                {% include 'include/artist-likes.html' %}
+            </div>
+            <div class="col-md-8" style="max-width: 720px;">
+                <h4 class="card-title" id="artist-name"><a href = "{{ artist.get_absolute_url }}">{{artist.name}}</a></h4>
+                <p class="card-text" id="artist-bio">{{ artist.biography|slice:":850" }}</p>
+            </div>
+            <p class="card-text" id="artist-bio">{{ artist.biography|slice:"850:" }}</p>
+            <p class="artist-albums-tracks" id="albums">
+                <span id="artists-albums"><b>Альбомы:</b>
+                {% for album in artist.artist_album.all %}
+                    <a href = "{{ album.get_absolute_url }}">{{album.title}}<b> </b></a>
+                {% empty %}
+                    <h9><a href = "{% url 'mainapp:album_post' %}">Добавь, кликнув сюда.</a></h9>
+                {% endfor %}
+                </span>
+            </p>
+            <p class="artist-albums-tracks" id="tracks">
+                <span><b>Популярные треки:</b>
+                {% for track in artist.track_artist.all|dictsortreversed:"rate"|slice:":3" %}
+                    {% autoescape off %}
+                        {{ track.html }}
+                    {% endautoescape %}
+                {% empty %}
+                    <h9><a href = "{% url 'mainapp:track_post' %}">Добавь, кликнув сюда.</a></h9>
+                {% endfor %}
+                </span>
+            </p>
+            <p class="artist-albums-tracks" id="genres">
+                <span><b>Жанры:</b>
+                {% for genre in artist.genres.all %}
+                    <h9>{{genre.name}}</h9>
+                {% empty %}
+                    <h9><a href = "{% url 'mainapp:artist_update' artist.id %}">Добавь, кликнув сюда.</a></h9>
+                {% endfor %}
+                </span>
+            </p>
+            {% if user.id == artist.user.id %}
+                <form action="{% url 'mainapp:artist_delete' artist.id %}" accept-charset="utf-8" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary artist-delete">Удалить артиста</button>
+                </form>
+                <form action="{% url 'mainapp:artist_update' artist.id %}" accept-charset="utf-8" method="PUT">
+                    <button type="submit" class="btn btn-secondary artist-update">Редактировать информацию об артисте</button>
+                </form>
+            {% endif %}
+            <div class="card-footer footer-custom">
+                <div class="comments-detail" id="comments">
+                    <p><h5><b>Комментарии</b></h5></p>
+                    <p>
+                    {% for comment in artist.get_comments %}
+                        <div class="card text-white bg-dark mb-3" style="max-width: 18rem;" id="comment-body">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="{{ comment.get_user_pic }}" class="img-fluid" alt="Photo">
+                                </div>
+                                <div class="col-md-4 col-md-offset-2">
+                                    <h5 class="card-title" id="comment-name">{{ comment.author_name }}</h5>
+                                    <p class="card-text" id="comment-text">{{ comment.comment_text }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <h6>Комментариев к данному артисту ещё нет. Будь первым!</h6>
+                    {% endfor %}
+                        <form method="POST" action="{% url 'mainapp:add_comment_to_artist' artist.id %}" id="add_comment">
+                            {% csrf_token %}
+                            {% if user.is_authenticated %}
+                                <div class="form-group">
+                                    <h5>{{ user.username  }}</h5>
+                                    <h7>{{ form.comment_text.label_tag }}</h7>
+                                    <h6>{{ form.comment_text }}</h6>
+                                    <h6>{{ form.comment_text.errors }}</h6>
+                                </div>
+                            {% else %}
+                                <div class="form-group">
+                                    <h7>{{ form.comment_text.label_tag }}</h7>
+                                    <h6>{{ form.comment_text }}</h6>
+                                    <h6>{{ form.comment_text.errors }}</h6>
+                                </div>
+                            {% endif %}
+                          <input type="submit" value="Отправить" class="w-25 btn btn-primary" enctype="multipart/form-data">
+                        </form>
+
+                    </div>
+                    </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
